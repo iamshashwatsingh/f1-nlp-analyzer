@@ -1,0 +1,9 @@
+year,category,regulation_text
+"2025","Technical","The 2025 technical regulations are a continuation of the ground-effect era introduced in 2022. The minimum car weight is maintained at 798kg, and teams are restricted in making major design changes as they focus development resources on the 2026 rules."
+"2025","Sporting","Sprint races continue with 6 events. Wind tunnel testing and CFD simulation times are strictly limited based on constructor standings, with the lowest-ranked teams receiving the most testing time."
+"2025","Financial","The cost cap is set at approximately $135 million, with adjustments for inflation and additional sprint events, to ensure financial parity among constructors."
+"2026","Power Unit","The MGU-H (Motor Generator Unit - Heat) is completely removed from the engines. The power units will rely on a near 50-50 split between the 1.6-litre internal combustion engine (reduced from 550kW to 400kW / ~535hp) and electrical power (increased from 120kW to 350kW / ~470hp via the MGU-K)."
+"2026","Fuel","100% fully sustainable synthetic e-fuels are mandated for all teams, aligning with Formula 1's goal of reaching net-zero carbon emissions by 2030."
+"2026","Aerodynamics","Active aerodynamics (moveable front and rear wings) are introduced. Cars will switch between Z-mode (high downforce for cornering) and X-mode (low drag configuration for straight-line speed)."
+"2026","Dimensions","The cars are made smaller and lighter: wheelbase is reduced from 3600mm to 3400mm, width is reduced from 2000mm to 1900mm, and the minimum car weight is cut by 30kg to 768kg."
+"2026","Overtake","The Drag Reduction System (DRS) is replaced by a Manual Override Mode (MOM). This mode provides the chasing car with a tactical burst of extra electrical energy (up to 350kW) at speeds above 290km/h to facilitate overtaking."
