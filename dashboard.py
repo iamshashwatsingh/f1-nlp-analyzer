@@ -939,178 +939,293 @@ elif app_mode == "Interactive Chatbot":
     user_msg = st.text_input("Ask a question (e.g. 'Who won Monaco?', 'Who got out at Barcelona?', 'What is RAG?', 'How big is the database?'):", "who won Monaco GP?")
     
     if st.button("Send"):
-        query_lower = user_msg.lower()
-        
-        # 1. Who Built the Project (Shashwat Singh)
-        if any(k in query_lower for k in ["built", "author", "who are you", "who made", "creator", "student", "shashwat", "singh"]):
-            st.write("**F1 Bot:** This project was designed and built by **Shashwat Singh**, a student of M.Sc. Machine Learning and Data Analytics at Hochschule Aalen.")
-            
-        # 2. F1 Regulations (2025 & 2026)
-        elif any(k in query_lower for k in ["regulation", "regulations", "rule", "rules", "mgu", "active aerodynamics", "active aero", "z-mode", "x-mode", "e-fuel", "e-fuels", "override", "mom", "drs", "cost cap", "budget cap"]) or ("2025" in query_lower and any(w in query_lower for w in ["weight", "car", "limit", "cost", "cap", "sprint", "sporting", "technical", "financial", "change"])) or ("2026" in query_lower and any(w in query_lower for w in ["weight", "car", "limit", "engine", "power", "aero", "fuel", "override", "mom", "drs", "dimension", "change", "size", "wheelbase", "width", "mgu-k", "mgu-h"])):
-            # Specific queries within regulations
-            if "2025" in query_lower:
-                if any(k in query_lower for k in ["weight", "heavy", "limit"]):
-                    st.write("**F1 Bot:** In **2025**, the minimum car weight is maintained at **798kg**, carrying over the ground-effect rules from previous seasons.")
-                elif any(k in query_lower for k in ["cost", "cap", "budget", "financial"]):
-                    st.write("**F1 Bot:** The F1 budget cost cap for **2025** is set at approximately **$135 million** (with adjustments for inflation and sprint events) to ensure financial parity among constructors.")
-                elif any(k in query_lower for k in ["sporting", "sprint", "test", "wind tunnel", "cfd"]):
-                    st.write("**F1 Bot:** For **2025**, the sporting rules keep **6 Sprint races**. Wind tunnel testing and CFD simulation times are strictly limited based on constructor standings (lower-placed teams get more time).")
-                else:
-                    st.write("**F1 Bot:** Key **2025 F1 Regulations** summary:")
-                    st.write("- **Technical:** Ground-effect regulations continue; minimum car weight remains **798kg**. Major design changes are limited to allow focus on 2026.")
-                    st.write("- **Sporting:** Sprint events continue at 6 venues. Aerodynamic testing (ATR) limits favor lower-ranked teams.")
-                    st.write("- **Financial:** Budget cost cap is maintained around **$135 million**.")
-                    
-            elif "2026" in query_lower or any(k in query_lower for k in ["mgu", "override", "mom", "z-mode", "x-mode", "active aero", "e-fuel", "fuels", "sustainable"]):
-                if any(k in query_lower for k in ["engine", "power unit", "pu", "mgu", "split", "hp", "horsepower"]):
-                    st.write("**F1 Bot:** The **2026 Power Unit regulations** introduce a massive change:")
-                    st.write("- Complete removal of the **MGU-H** (Motor Generator Unit - Heat).")
-                    st.write("- A near **50-50 power split** between the 1.6L internal combustion engine (reduced from 550kW to 400kW / ~535hp) and the electrical MGU-K (increased from 120kW to 350kW / ~470hp).")
-                elif any(k in query_lower for k in ["aero", "wing", "drag", "downforce", "active", "z-mode", "x-mode"]):
-                    st.write("**F1 Bot:** The **2026 Aerodynamics regulations** introduce **Active Aerodynamics**:")
-                    st.write("- Moveable front and rear wings.")
-                    st.write("- **Z-mode**: High-downforce configuration for cornering stability.")
-                    st.write("- **X-mode**: Low-drag configuration for maximum straight-line speed.")
-                elif any(k in query_lower for k in ["fuel", "sustainable", "e-fuel", "net zero"]):
-                    st.write("**F1 Bot:** In **2026**, all F1 cars must run on **100% fully sustainable synthetic e-fuels**, as part of F1's commitment to net-zero carbon emissions by 2030.")
-                elif any(k in query_lower for k in ["weight", "dimension", "size", "wheelbase", "width", "light", "small"]):
-                    st.write("**F1 Bot:** The **2026 car dimensions** are reduced to make them smaller and lighter:")
-                    st.write("- **Weight:** Cut by 30kg, setting the minimum weight at **768kg**.")
-                    st.write("- **Wheelbase:** Reduced from 3600mm to **3400mm**.")
-                    st.write("- **Width:** Reduced from 2000mm to **1900mm**.")
-                elif any(k in query_lower for k in ["override", "mom", "overtake", "drs", "pass"]):
-                    st.write("**F1 Bot:** In **2026**, the Drag Reduction System (DRS) is replaced by a **Manual Override Mode (MOM)**. Chasing cars get a tactical burst of extra electrical energy (up to 350kW) at speeds above 290km/h to help them overtake.")
-                else:
-                    st.write("**F1 Bot:** Key **2026 F1 Regulations** summary:")
-                    st.write("- **Power Unit:** Removal of MGU-H; near 50-50 split between ICE (400kW) and electrical (350kW).")
-                    st.write("- **Active Aero:** Moveable wings with Z-mode (corners) and X-mode (straights).")
-                    st.write("- **Overtaking:** DRS replaced by Manual Override Mode (MOM) for electrical boosts.")
-                    st.write("- **Dimensions:** Smaller cars (wheelbase 3400mm, width 1900mm) and 30kg lighter (768kg min).")
-                    st.write("- **Sustainability:** 100% fully sustainable synthetic e-fuels.")
-            else:
-                # If they ask about regulations but don't specify the year, show both or search regs
-                retrieved_regs = search_regulations(user_msg, k=2)
-                if not retrieved_regs.empty:
-                    st.write("**F1 Bot:** Here are the regulation clauses matching your query:")
-                    for _, r_row in retrieved_regs.iterrows():
-                        st.write(f"- **{r_row['Year']} {r_row['Category']} Rule:** {r_row['Regulation Clause']}")
-                else:
-                    st.write("**F1 Bot:** I couldn't find a specific regulation matching your query. Here is a brief summary:")
-                    st.write("- **2025:** Continuation of the ground-effect rules, minimum car weight of 798kg, and a cost cap of $135m.")
-                    st.write("- **2026:** Major overhaul! MGU-H removed, 50-50 power split, active aero (X & Z modes), 100% sustainable fuels, and lighter cars (768kg).")
+        query_lower = user_msg.lower().strip()
 
-        # 3. Specific Driver DNF / Retirement / Got Out checks
-        elif "hamilton" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "engine", "happen"]):
-            st.write("**F1 Bot:** Lewis Hamilton retired on **Lap 12** of the **2026 Barcelona-Catalunya Grand Prix** due to a **Power Unit failure**.")
-        elif "albon" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "happen"]):
-            st.write("**F1 Bot:** Alexander Albon retired on **Lap 4** of the **2026 Barcelona-Catalunya Grand Prix** after a **collision in Turn 3**.")
-        elif "perez" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "happen"]):
-            st.write("**F1 Bot:** Sergio Perez retired on **Lap 1** of the **2026 Monaco Grand Prix** after a **massive multi-car collision** on the climb to Saint Devote.")
-        elif "hulkenberg" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "happen"]):
-            st.write("**F1 Bot:** Nico Hulkenberg retired on **Lap 1** of the **2026 Monaco Grand Prix** after being caught in the **Saint Devote collision** with Perez.")
-        elif "ocon" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "happen"]):
-            st.write("**F1 Bot:** Esteban Ocon retired on **Lap 45** of the **2026 Monaco Grand Prix** due to a **gearbox failure**.")
-        elif "sargeant" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "crash", "stop", "happen"]):
-            st.write("**F1 Bot:** Logan Sargeant retired on **Lap 25** of the **2026 Canadian Grand Prix** after **spinning into the wall at Turn 4**.")
-        elif "leclerc" in query_lower and any(k in query_lower for k in ["retire", "out", "dnf", "why", "stop", "issues", "happen"]) and ("canada" in query_lower or "montreal" in query_lower or "engine" in query_lower):
-            st.write("**F1 Bot:** Charles Leclerc retired on **Lap 40** of the **2026 Canadian Grand Prix** due to **engine mapping issues** following a rain shower.")
-            
-        # 3. F1 Teams & Drivers Database Checks
-        elif any(k in query_lower for k in ["nationality", "number", "who drives for", "driver lineup", "team member", "drives for", "teammate", "team-mate"]):
-            matched_teams = []
-            for _, row in df_teams.iterrows():
-                drv_last = row["driver"].lower().split()[-1]
-                drv_first = row["driver"].lower().split()[0]
-                team_words = row["team"].lower().split()
-                if drv_last in query_lower or drv_first in query_lower or any(t_w in query_lower for t_w in team_words if t_w not in ["racing", "team", "amg", "cash", "app", "visa"]):
-                    matched_teams.append(row)
-            if matched_teams:
-                st.write("**F1 Bot:** Here are the details from the F1 2025/2026 Teams & Drivers Database:")
-                for row in matched_teams:
-                    st.write(f"- **{row['driver']}** (No. {row['number']}, {row['nationality']}) drives for **{row['team']}** as a *{row['role']}*.")
-                    st.write(f"  * Status 2025: `{row['status_2025']}` | Status 2026: `{row['status_2026']}`")
-            else:
-                st.write("**F1 Bot:** I couldn't find a specific driver or team matching that query in the database. Here is a sample of our drivers lineup:")
-                st.write(", ".join(df_teams["driver"].unique()[:10]))
-                
-        # 4. F1 Technical Specs Database Checks
-        elif any(k in query_lower for k in ["spec", "specs", "specification", "specifications", "weight limit", "width limit", "wheelbase limit", "car weight", "car width", "car size", "mgu-k power", "mgu-h power", "sustainable fuel", "budget cost cap", "overtake mode"]):
-            retrieved_tech = search_tech_specs(user_msg, k=3)
-            if not retrieved_tech.empty:
-                st.write("**F1 Bot:** Here are the technical specification entries matching your query:")
-                for _, row in retrieved_tech.iterrows():
-                    st.write(f"- **{row['Year']} {row['Parameter']}:** `{row['Value']}` — *{row['Description']}*")
-            else:
-                st.write("**F1 Bot:** Try asking about specific technical parameters like car weight, width, wheelbase, MGU-K power, sustainable fuel, or budget cost cap!")
+        # ── helper: search corpus and return top messages ──────────────────
+        def corpus_search_reply(keyword, n=3):
+            hits = df[df["message_text"].str.lower().str.contains(keyword, na=False)]
+            if not hits.empty:
+                rows = hits[["driver_name", "message_text"]].head(n)
+                for _, r in rows.iterrows():
+                    st.write(f"- **{r['driver_name']}:** \"{r['message_text']}\"")
+                return True
+            return False
 
-        # 5. Check for general Race Results / Winners / GP DNFs
-        else:
+        # ────────────────────────────────────────────────────────────────────
+        # 1. GREETINGS
+        # ────────────────────────────────────────────────────────────────────
+        if any(k in query_lower for k in ["hi", "hello", "hey", "good morning", "good afternoon", "sup", "howdy"]):
+            st.write("**F1 Bot:** Hello! 👋 I'm the F1 Radio & Results Bot. You can ask me about:")
+            st.write("- 🏆 Race winners & podiums ('Who won Monaco?')")
+            st.write("- 💥 DNF retirements ('Who got out at Barcelona?')")
+            st.write("- 📻 Driver radio messages ('What did Sainz say?')")
+            st.write("- 🔧 Tires & strategy ('What compounds did Hamilton use?')")
+            st.write("- 📜 F1 Regulations 2025 & 2026 ('What are the 2026 engine rules?')")
+            st.write("- 🧠 NLP topics ('What is TF-IDF?', 'Explain tokenization')")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 2. PROJECT / AUTHOR INFO
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["built", "author", "who are you", "who made", "creator",
+                                             "student", "shashwat", "singh", "project", "about this",
+                                             "what is this", "tell me about", "hochschule", "aalen"]):
+            st.write("**F1 Bot:** This project was designed and built by **Shashwat Singh**, a student of "
+                     "**M.Sc. Machine Learning and Data Analytics** at **Hochschule Aalen**.")
+            st.write("It is an end-to-end NLP pipeline covering **web scraping**, **TF-IDF search**, "
+                     "**sentiment analysis**, **custom NER**, **deep learning classifiers** (RNN, LSTM, MLP), "
+                     "and a **RAG simulator** — all applied to real F1 team radio transcripts.")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 3. DATABASE / CORPUS STATS
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["how big", "how many", "database", "corpus", "size",
+                                             "messages", "dataset", "rows", "records", "entries"]):
+            st.write(f"**F1 Bot:** The corpus contains **{len(df):,} team radio messages** across "
+                     f"**{df['grand_prix'].nunique()} Grand Prix races** with **{df['driver_name'].nunique()} unique drivers**.")
+            st.write(f"It covers the **2026 Barcelona**, **Monaco**, and **Canadian** Grand Prix sessions.")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 4. RACE WINNERS / PODIUMS / RACE SUMMARIES
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["win", "won", "winner", "podium", "1st", "first place",
+                                             "who finished", "race result", "champion"]):
             matched_gp = None
             for gp_name in RACE_DATA.keys():
-                short_name = gp_name.replace(" Grand Prix", "").lower()
-                city = short_name.split()[1] if len(short_name.split()) > 1 else short_name
-                # Handle alternative naming conventions (e.g. Spain, Montreal)
-                if city in query_lower or ("spain" in query_lower and "barcelona" in short_name) or ("catalunya" in query_lower and "barcelona" in short_name) or ("montreal" in query_lower and "canada" in short_name):
+                short = gp_name.replace("Grand Prix", "").lower()
+                if any(w in query_lower for w in short.split()):
                     matched_gp = gp_name
                     break
-                    
+                if "spain" in query_lower and "barcelona" in short: matched_gp = gp_name; break
+                if "catalunya" in query_lower and "barcelona" in short: matched_gp = gp_name; break
+                if "montreal" in query_lower and "canada" in short: matched_gp = gp_name; break
             if matched_gp:
                 race_info = RACE_DATA[matched_gp]
-                if any(k in query_lower for k in ["win", "won", "winner", "podium", "1st", "first"]):
-                    st.write(f"**F1 Bot:** The official winner of the {matched_gp} was **{race_info['winner']}**.")
-                    st.write("The podium finishers were:")
-                    for p in race_info["podium"]:
-                        st.write(f"- {p}")
-                elif any(k in query_lower for k in ["out", "retire", "dnf", "crash", "stop", "retired", "happen"]):
-                    if race_info["retirements"]:
-                        st.write(f"**F1 Bot:** Here are the DNF retirements recorded at the {matched_gp}:")
-                        for r in race_info["retirements"]:
-                            st.write(f"- **{r['driver']}** retired on **Lap {r['lap']}** due to *{r['reason']}*.")
-                    else:
-                        st.write(f"**F1 Bot:** No retirements were recorded in the {matched_gp}.")
-                else:
-                    st.write(f"**F1 Bot:** Here is the summary of the {matched_gp}:")
-                    st.info(race_info["summary"])
-                    
-            # 4. Basic Database Statistics
-            elif any(k in query_lower for k in ["how big", "how many", "database size", "size of corpus", "corpus size", "messages count"]):
-                st.write(f"**F1 Bot:** The pre-scraped database contains **{len(df)} total team radio messages** across **{df['grand_prix'].nunique()} Grand Prix races** with **{df['driver_name'].nunique()} unique drivers**.")
-                
-            # 5. List Drivers
-            elif any(k in query_lower for k in ["which drivers", "drivers list", "list of drivers", "driver names", "show me drivers"]):
-                drivers_list = df["driver_name"].unique()
-                st.write(f"**F1 Bot:** Here are the drivers included in the database: {', '.join(drivers_list[:10])} and others ({len(drivers_list)} total).")
-                
-            # 6. Model Accuracy & Benchmarks
-            elif any(k in query_lower for k in ["best model", "highest accuracy", "accuracy", "benchmark", "model score"]):
-                st.write("**F1 Bot:** The **Linear SVM classifier** achieved the highest accuracy on the corpus at **93.81%**, followed closely by the PyTorch MLP (92.57%) and Logistic Regression (92.21%). Naive Bayes and sequence models (RNN/LSTM) scored around 79-81%.")
-                
-            # 7. Core NLP Definitions
-            elif any(k in query_lower for k in ["what is tf-idf", "tf idf", "tfidf"]):
-                st.write("**F1 Bot:** **TF-IDF** (Term Frequency-Inverse Document Frequency) measures how important a word is to a specific document relative to the whole corpus. It penalizes frequent words like 'the' while highlighting unique terms like 'box' or 'degradation'.")
-                
-            elif any(k in query_lower for k in ["what is rag", "rag"]):
-                st.write("**F1 Bot:** **RAG** (Retrieval-Augmented Generation) retrieves context from a local database (like retrieving specific radio transcripts matching a query) and packages it into a prompt template for a text generator (LLM) to produce an accurate, context-grounded answer.")
-                
-            elif any(k in query_lower for k in ["zipf", "luhn"]):
-                st.write("**F1 Bot:** **Zipf's Law** states word frequency is inversely proportional to its rank. **Luhn's cuts** set bounds (excluding ultra-frequent stopwords and ultra-rare words) to isolate words carrying the highest information density.")
-                
-            # 8. Fallback General Dialogues
-            elif any(k in query_lower for k in ["hi", "hello", "hey"]):
-                st.write("**F1 Bot:** Hello! I am the F1 Radio & Results Bot. Ask me about driver communications ('what did Sainz say'), DNF retirements ('who got out at Monaco'), winners ('who won Canada'), or database stats!")
-            elif "strategy" in query_lower or "pit" in query_lower or "box" in query_lower:
-                samples = df[df["message_text"].str.lower().str.contains("box")]["message_text"].iloc[:3].tolist()
-                st.write("**F1 Bot:** Here are some strategy radio transmissions:")
-                for s in samples:
-                    st.write(f"- \"{s}\"")
-            elif "sentiment" in query_lower or "angry" in query_lower or "happy" in query_lower:
-                samples = df[df["message_text"].str.lower().str.contains("no|bad|wtf|problem")]["message_text"].iloc[:3].tolist()
-                st.write("**F1 Bot:** Here are some agitated driver radio messages:")
-                for s in samples:
-                    st.write(f"- \"{s}\"")
+                st.write(f"**F1 Bot:** 🏆 The winner of the **{matched_gp}** was **{race_info['winner']}**.")
+                st.write("**Podium:**")
+                for p in race_info["podium"]:
+                    st.write(f"  {p}")
             else:
-                st.write("**F1 Bot:** I'm sorry, I couldn't find details for that query. Try asking 'who won Monaco?', 'who got out at Canada?', 'what is RAG?', or 'what model has the highest accuracy?'!")
-            
+                st.write("**F1 Bot:** Here are the race winners across the 3 Grand Prix in the dataset:")
+                for gp, info in RACE_DATA.items():
+                    st.write(f"- **{gp}:** Won by **{info['winner']}**")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 5. DNF / RETIREMENTS / CRASHES
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["retire", "dnf", "out", "crash", "collision", "stopped",
+                                             "mechanical", "failure", "accident", "incident", "withdrawal"]):
+            matched_gp = None
+            for gp_name in RACE_DATA.keys():
+                short = gp_name.replace("Grand Prix", "").lower()
+                if any(w in query_lower for w in short.split()):
+                    matched_gp = gp_name; break
+                if "spain" in query_lower and "barcelona" in short: matched_gp = gp_name; break
+                if "montreal" in query_lower and "canada" in short: matched_gp = gp_name; break
+                if "monaco" in query_lower and "monaco" in short: matched_gp = gp_name; break
+
+            # Specific driver retirement queries
+            driver_dnfs = {
+                "hamilton": "Lewis Hamilton retired on **Lap 12** of the **2026 Barcelona GP** due to a **Power Unit failure**.",
+                "albon": "Alexander Albon retired on **Lap 4** of the **2026 Barcelona GP** after a **collision in Turn 3**.",
+                "perez": "Sergio Perez retired on **Lap 1** of the **2026 Monaco GP** after a **massive multi-car collision** at Saint Devote.",
+                "hulkenberg": "Nico Hulkenberg retired on **Lap 1** of the **2026 Monaco GP** — also caught in the **Saint Devote collision**.",
+                "ocon": "Esteban Ocon retired on **Lap 45** of the **2026 Monaco GP** due to a **gearbox failure**.",
+                "sargeant": "Logan Sargeant retired on **Lap 25** of the **2026 Canadian GP** after **spinning into the wall at Turn 4**.",
+                "leclerc": "Charles Leclerc retired on **Lap 40** of the **2026 Canadian GP** due to **engine mapping issues** following a rain shower.",
+            }
+            matched_driver = next((k for k in driver_dnfs if k in query_lower), None)
+            if matched_driver:
+                st.write(f"**F1 Bot:** {driver_dnfs[matched_driver]}")
+            elif matched_gp:
+                race_info = RACE_DATA[matched_gp]
+                if race_info["retirements"]:
+                    st.write(f"**F1 Bot:** DNF retirements at the **{matched_gp}**:")
+                    for r in race_info["retirements"]:
+                        st.write(f"- **{r['driver']}** — Lap {r['lap']}: *{r['reason']}*")
+                else:
+                    st.write(f"**F1 Bot:** No retirements recorded at the **{matched_gp}**.")
+            else:
+                st.write("**F1 Bot:** Here are all DNF retirements across the dataset:")
+                for gp, info in RACE_DATA.items():
+                    if info["retirements"]:
+                        for r in info["retirements"]:
+                            st.write(f"- **{gp}** | **{r['driver']}** — Lap {r['lap']}: *{r['reason']}*")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 6. SPECIFIC DRIVER QUERIES (radio messages, performance)
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["verstappen", "hamilton", "leclerc", "sainz", "norris",
+                                             "piastri", "russell", "alonso", "stroll", "gasly", "albon",
+                                             "ocon", "perez", "hulkenberg", "tsunoda", "lawson",
+                                             "bortoleto", "antonelli", "bearman"]):
+            # Find which driver was mentioned
+            driver_map = {
+                "verstappen": "Max Verstappen", "hamilton": "Lewis Hamilton",
+                "leclerc": "Charles Leclerc", "sainz": "Carlos Sainz",
+                "norris": "Lando Norris", "piastri": "Oscar Piastri",
+                "russell": "George Russell", "alonso": "Fernando Alonso",
+                "stroll": "Lance Stroll", "gasly": "Pierre Gasly",
+                "albon": "Alexander Albon", "ocon": "Esteban Ocon",
+                "perez": "Sergio Perez", "hulkenberg": "Nico Hulkenberg",
+                "tsunoda": "Yuki Tsunoda", "lawson": "Liam Lawson",
+                "bortoleto": "Gabriel Bortoleto", "antonelli": "Kimi Antonelli",
+                "bearman": "Oliver Bearman",
+            }
+            matched_drv_key = next((k for k in driver_map if k in query_lower), None)
+            if matched_drv_key:
+                full_name = driver_map[matched_drv_key]
+                drv_msgs = df[df["driver_name"].str.lower().str.contains(matched_drv_key, na=False)]
+                if not drv_msgs.empty:
+                    st.write(f"**F1 Bot:** Here are sample radio messages from **{full_name}** (found {len(drv_msgs)} messages in database):")
+                    for _, row in drv_msgs[["grand_prix", "message_text"]].head(5).iterrows():
+                        st.write(f"- *[{row['grand_prix']}]* \"{row['message_text']}\"")
+                else:
+                    st.write(f"**F1 Bot:** No radio messages found for **{full_name}** in the current corpus.")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 7. TIRE / COMPOUND QUESTIONS
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["tire", "tyre", "compound", "soft", "medium", "hard",
+                                             "intermediate", "inter", "wet", "degradation", "deg",
+                                             "blister", "graining", "pit stop", "undercut", "overcut"]):
+            st.write("**F1 Bot:** 🔴⚪🟡 Here are real F1 radio messages about tires and compounds:")
+            keyword = "soft|medium|hard|tyre|tire|compound|deg|blister"
+            found = corpus_search_reply(keyword, n=5)
+            if not found:
+                st.write("No specific tire messages found. The 2026 compounds used were: Soft (C5), Medium (C3), Hard (C2).")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 8. STRATEGY / BOX / PIT QUESTIONS
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["strategy", "strat", "box", "pit", "undercut", "overcut",
+                                             "mode", "switch", "offset", "safety car", "vsc", "restart"]):
+            st.write("**F1 Bot:** 🔧 Here are strategy-related radio messages from the corpus:")
+            corpus_search_reply("box|strat|pit|mode|offset|undercut", n=5)
+
+        # ────────────────────────────────────────────────────────────────────
+        # 9. TEAMS QUESTIONS
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["red bull", "mercedes", "ferrari", "mclaren", "aston martin",
+                                             "alpine", "williams", "haas", "sauber", "audi", "team",
+                                             "constructor", "lineup", "drives for", "teammates"]):
+            hit_rows = []
+            for _, row in df_teams.iterrows():
+                team_w = row["team"].lower()
+                if any(t in query_lower for t in team_w.split() if t not in ["racing", "team", "amg", "cash", "app", "visa"]):
+                    hit_rows.append(row)
+            if hit_rows:
+                st.write("**F1 Bot:** Here are the matching team & driver entries:")
+                for row in hit_rows:
+                    st.write(f"- **{row['driver']}** (#{row['number']}, {row['nationality']}) → **{row['team']}** | {row['role']}")
+            else:
+                st.write("**F1 Bot:** Here is the full 2025/2026 F1 driver lineup:")
+                for _, row in df_teams.iterrows():
+                    st.write(f"- **{row['driver']}** → {row['team']}")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 10. F1 REGULATIONS 2025 & 2026
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["regulation", "rule", "mgu", "aero", "active aerodynamics",
+                                             "z-mode", "x-mode", "e-fuel", "efuel", "override", "mom",
+                                             "drs", "cost cap", "budget cap", "sustainable", "wheelbase",
+                                             "car weight", "car width"]) or \
+             any(yr in query_lower for yr in ["2025", "2026"]):
+            if "2025" in query_lower:
+                st.write("**F1 Bot:** Key **2025 F1 Regulations:**")
+                st.write("- **Car Weight:** Minimum **798kg** (ground-effect rules continue).")
+                st.write("- **Sporting:** 6 Sprint races. CFD/wind-tunnel ATR limits favour lower-ranked teams.")
+                st.write("- **Budget Cap:** ~**$135 million** per team.")
+            elif "2026" in query_lower or any(k in query_lower for k in ["mgu", "mom", "active aero", "efuel", "e-fuel", "override"]):
+                st.write("**F1 Bot:** Key **2026 F1 Regulations** (major overhaul):")
+                st.write("- **Power Unit:** MGU-H **removed**. Near 50/50 split — ICE 400kW + MGU-K 350kW.")
+                st.write("- **Active Aerodynamics:** Moveable front/rear wings. **Z-mode** (high downforce corners) / **X-mode** (low drag straights).")
+                st.write("- **Overtaking:** DRS replaced by **Manual Override Mode (MOM)** — electrical boost >290km/h.")
+                st.write("- **Car Size:** Wheelbase 3400mm, Width 1900mm, Weight min **768kg** (30kg lighter).")
+                st.write("- **Fuel:** 100% sustainable **synthetic e-fuels** mandatory.")
+            else:
+                retrieved_regs = search_regulations(user_msg, k=3)
+                if not retrieved_regs.empty:
+                    st.write("**F1 Bot:** Here are relevant regulation clauses:")
+                    for _, r_row in retrieved_regs.iterrows():
+                        st.write(f"- **{r_row['Year']} — {r_row['Category']}:** {r_row['Regulation Clause']}")
+                else:
+                    st.write("**F1 Bot:** Try asking: '2025 regulations' or '2026 engine rules'.")
+
+        # ────────────────────────────────────────────────────────────────────
+        # 11–14: NLP CONCEPTS, BENCHMARKS, DRIVERS LIST, SMART FALLBACK
+        # (handled earlier in block — reached via the else at end)
+        # ────────────────────────────────────────────────────────────────────
+        elif any(k in query_lower for k in ["what is", "explain", "define", "how does", "how do", "what are"]):
+            if any(k in query_lower for k in ["tf-idf", "tfidf", "tf idf", "term frequency"]):
+                st.write("**F1 Bot:** **TF-IDF** weighs word importance: high TF (frequent in this doc) × high IDF (rare across all docs) = high score.")
+                st.write("Example: `'box'` appears in few messages → high IDF. `'the'` appears in all → IDF ≈ 0.")
+            elif any(k in query_lower for k in ["tokenization", "tokenise", "tokenize", "token"]):
+                st.write("**F1 Bot:** **Tokenization** splits text into words/punctuation. `'Box this lap!'` → `['Box', 'this', 'lap', '!']`")
+            elif any(k in query_lower for k in ["lemmatization", "lemma", "lemmatize"]):
+                st.write("**F1 Bot:** **Lemmatization** maps words to base form: `'leading'` → `'lead'`, `'tires'` → `'tire'`, `'won'` → `'win'`.")
+            elif any(k in query_lower for k in ["pos", "part of speech", "pos tag", "tagging"]):
+                st.write("**F1 Bot:** **POS Tagging** labels each token: `'box box'` → both tagged as **VERB** (imperative command).")
+            elif any(k in query_lower for k in ["ner", "named entity", "entity recognition"]):
+                st.write("**F1 Bot:** **NER** extracts real-world entities. Our custom model detects: `DRIVER`, `TEAM`, `TIRE_COMPOUND`, `STRATEGY`.")
+            elif any(k in query_lower for k in ["rag", "retrieval augmented", "retrieval-augmented"]):
+                st.write("**F1 Bot:** **RAG** = retrieve facts from DB + inject as context into LLM prompt → grounded, factual answers.")
+            elif any(k in query_lower for k in ["sentiment", "emotion", "polarity", "lexicon"]):
+                st.write("**F1 Bot:** **Sentiment Analysis** scores text polarity. Our F1 lexicon scores `'p1'` positive, `'wtf'` negative.")
+            elif any(k in query_lower for k in ["lstm", "rnn", "recurrent", "sequence"]):
+                st.write("**F1 Bot:** **RNN** processes tokens sequentially. **LSTM** adds memory gates to remember long-range context. LSTM: 81.42%, RNN: 79.99%.")
+            elif any(k in query_lower for k in ["svm", "logistic", "naive bayes", "classifier"]):
+                st.write("**F1 Bot:** Classifiers on TF-IDF features: SVM 93.81% ✅ > MLP 92.57% > LogReg 92.21% > LSTM 81.42% > RNN 79.99% > NB 79.94%.")
+            elif any(k in query_lower for k in ["sparse", "csr", "csc", "matrix"]):
+                st.write("**F1 Bot:** **Sparse Matrix** stores only non-zero values. On 18,574 × 5,000 vocabulary, achieves ~**30× memory savings** vs dense.")
+            elif any(k in query_lower for k in ["zipf", "luhn"]):
+                st.write("**F1 Bot:** **Zipf's Law**: word frequency ∝ 1/rank. **Luhn's Cut**: remove ultra-frequent stopwords and ultra-rare terms to isolate high-information vocabulary.")
+            elif any(k in query_lower for k in ["beautifulsoup", "scraping", "crawler", "scraper"]):
+                st.write("**F1 Bot:** Data collected via a **BeautifulSoup crawler** on AutoLAP archive. robots.txt verified. 18,574 messages collected.")
+            elif any(k in query_lower for k in ["cbow", "word embedding", "embedding", "word2vec"]):
+                st.write("**F1 Bot:** **CBOW** trains 50-dim word vectors so `'box'` and `'pit'` become semantically close in vector space.")
+            else:
+                st.write("**F1 Bot:** I can explain: `TF-IDF`, `Tokenization`, `Lemmatization`, `POS Tagging`, `NER`, `RAG`, `Sentiment`, `Zipf's Law`, `Sparse Matrices`, `LSTM/RNN`, `SVM`, `Word Embeddings`, `Web Scraping`.")
+
+        elif any(k in query_lower for k in ["accuracy", "benchmark", "best model", "performance", "model score", "highest"]):
+            st.write("**F1 Bot:** Classifier Benchmarks:")
+            st.write("| Model | Accuracy |")
+            st.write("|---|---|")
+            st.write("| Linear SVM | **93.81%** ✅ |")
+            st.write("| PyTorch MLP | 92.57% |")
+            st.write("| Logistic Regression | 92.21% |")
+            st.write("| PyTorch LSTM | 81.42% |")
+            st.write("| PyTorch RNN | 79.99% |")
+            st.write("| Naive Bayes | 79.94% |")
+
+        elif any(k in query_lower for k in ["which drivers", "list drivers", "all drivers", "driver names", "driver list"]):
+            drivers_list = sorted(df["driver_name"].unique())
+            st.write(f"**F1 Bot:** The corpus includes **{len(drivers_list)} drivers:** {', '.join(drivers_list)}")
+
+        else:
+            # Smart fallback — search corpus
+            search_words = [w for w in query_lower.split() if len(w) > 3]
+            found_any = False
+            for sw in search_words:
+                hits = df[df["message_text"].str.lower().str.contains(sw, na=False)]
+                if not hits.empty and len(hits) > 1:
+                    st.write(f"**F1 Bot:** Found **{len(hits)}** messages matching your query. Top results:")
+                    for _, row in hits[["driver_name", "grand_prix", "message_text"]].head(4).iterrows():
+                        st.write(f"- **{row['driver_name']}** *[{row['grand_prix']}]*: \"{row['message_text']}\"")
+                    found_any = True
+                    break
+            if not found_any:
+                regs = search_regulations(user_msg, k=2)
+                if not regs.empty:
+                    st.write("**F1 Bot:** Closest matching regulation clauses:")
+                    for _, r_row in regs.iterrows():
+                        st.write(f"- **{r_row['Year']} — {r_row['Category']}:** {r_row['Regulation Clause']}")
+                    found_any = True
+            if not found_any:
+                st.warning("**F1 Bot:** I couldn't find a match. Try:")
+                st.write("- 🏆 *'Who won Monaco?'* | 💥 *'Who retired at Barcelona?'*")
+                st.write("- 📻 *'What did Verstappen say?'* | 🔧 *'Show me tire messages'*")
+                st.write("- 🧠 *'What is TF-IDF?'* | 📜 *'2026 engine rules'* | 📊 *'Best model accuracy'*")
+
     st.markdown("---")
     st.markdown("### Trigram Radio Text Generation")
     st.markdown("Generate synthetic F1 radio messages using n-gram word sequences.")
